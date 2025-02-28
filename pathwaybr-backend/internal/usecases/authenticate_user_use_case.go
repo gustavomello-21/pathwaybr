@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"context"
 	"errors"
 
 	"github.com/gustavomello-21/pathwaybr-backend/internal/usecases/contracts"
@@ -21,8 +20,8 @@ func NewAuthenticateUserUseCase(userRepository repositories.UserRepository) cont
 	}
 }
 
-func (uc *AuthenticateUserUseCase) Execute(ctx context.Context, input input.AuthenticateUserInput) (string, error) {
-	user, err := uc.userRepository.FindByEmail(ctx, input.Email)
+func (uc *AuthenticateUserUseCase) Execute(input input.AuthenticateUserInput) (string, error) {
+	user, err := uc.userRepository.FindByEmail(input.Email)
 	if err != nil {
 		return "", err
 	}
@@ -37,7 +36,7 @@ func (uc *AuthenticateUserUseCase) Execute(ctx context.Context, input input.Auth
 		return "", errors.New("invalid password")
 	}
 
-	token, err := jwt.GenerateToken(user)
+	token, err := jwt.GenerateToken(*user)
 	if err != nil {
 		return "", err
 	}

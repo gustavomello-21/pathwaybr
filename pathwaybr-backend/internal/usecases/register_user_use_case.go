@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"context"
 	"errors"
 	"fmt"
 
@@ -23,8 +22,8 @@ func NewRegisterUserUseCase(userRepository repositories.UserRepository) contract
 	}
 }
 
-func (uc *RegisterUserUseCase) Execute(ctx context.Context, input input.RegisterUserInput) (string, error) {
-	user, err := uc.userRepository.FindByEmail(ctx, input.Email)
+func (uc *RegisterUserUseCase) Execute(input input.RegisterUserInput) (string, error) {
+	user, err := uc.userRepository.FindByEmail(input.Email)
 	if err != nil {
 		fmt.Println("error finding user by email: ", err)
 		return "", err
@@ -40,19 +39,19 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, input input.Register
 		return "", err
 	}
 
-	user = entities.User{
+	user = &entities.User{
 		Email:    input.Email,
 		Username: input.Username,
 		Password: hashedPassword,
 	}
 
-	err = uc.userRepository.Save(ctx, user)
+	err = uc.userRepository.Save(*user)
 	if err != nil {
 		fmt.Println("error saving user: ", err)
 		return "", err
 	}
 
-	token, err := jwt.GenerateToken(user)
+	token, err := jwt.GenerateToken(*user)
 	if err != nil {
 		fmt.Println("error generating token: ", err)
 		return "", err

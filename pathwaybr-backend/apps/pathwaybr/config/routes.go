@@ -2,17 +2,23 @@ package config
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
+	handler "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
+	v1 "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
 )
 
-func Routes() *gin.Engine {
+func Routes(controllers []interface{}) *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/health-check", controllers.NewHealthCheckController().Get)
+	r.GET("/health-check", handler.NewHealthCheckController().Get)
 
 	v1Api := r.Group("/api/v1")
 	{
-		v1Api.GET("/login")
+		for _, controller := range controllers {
+			switch c := controller.(type) {
+			case *v1.SessionController:
+				v1Api.POST("/login", c.Create)
+			}
+		}
 	}
 	return r
 }

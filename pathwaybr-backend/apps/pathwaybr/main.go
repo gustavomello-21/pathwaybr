@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	v1 "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
 	"github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/config"
 	"github.com/gustavomello-21/pathwaybr-backend/internal/infra/database/postgres"
 	"github.com/gustavomello-21/pathwaybr-backend/internal/infra/database/postgres/migrations"
+	"github.com/gustavomello-21/pathwaybr-backend/internal/infra/database/postgres/repositories"
+	"github.com/gustavomello-21/pathwaybr-backend/internal/usecases"
 	"github.com/joho/godotenv"
 )
 
@@ -30,7 +33,15 @@ func main() {
 		fmt.Println("Error migrating models: ", err)
 	}
 
-	router := config.Routes()
+	postgresClient := postgres.NewClient(dbConfig)
+
+	userRepository := repositories.NewUserRepository(*postgresClient)
+	authenticateUserUseCase := usecases.NewAuthenticateUserUseCase(userRepository)
+	controllers := []interface{}{
+		v1.NewSessionController(authenticateUserUseCase),
+	}
+
+	router := config.Routes(controllers)
 	router.Run(":8080")
 	fmt.Println("Rodando o servidor...")
 }
