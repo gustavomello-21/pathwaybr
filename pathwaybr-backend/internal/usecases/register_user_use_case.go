@@ -34,7 +34,6 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, input input.Register
 		return "", errors.New("user already exists")
 	}
 
-	// TODO: Implement This
 	hashedPassword, err := hasher.HashPassword(input.Password)
 	if err != nil {
 		fmt.Println("error hashing password: ", err)
@@ -43,7 +42,7 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, input input.Register
 
 	user = entities.User{
 		Email:    input.Email,
-		Name:     input.Name,
+		Username: input.Username,
 		Password: hashedPassword,
 	}
 
@@ -53,8 +52,11 @@ func (uc *RegisterUserUseCase) Execute(ctx context.Context, input input.Register
 		return "", err
 	}
 
-	// TODO: implement this
-	token := jwt.GenerateToken()
+	token, err := jwt.GenerateToken(user)
+	if err != nil {
+		fmt.Println("error generating token: ", err)
+		return "", err
+	}
 
 	return token, nil
 }

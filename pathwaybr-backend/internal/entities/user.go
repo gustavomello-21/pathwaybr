@@ -7,7 +7,7 @@ type User struct {
 	ID int
 
 	// User Name
-	Name string
+	Username string
 
 	// User Password
 	Password string

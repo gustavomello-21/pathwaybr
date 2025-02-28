@@ -1,9 +1,22 @@
 package hasher
 
+import (
+	"golang.org/x/crypto/bcrypt"
+)
+
 func HashPassword(password string) (string, error) {
-	return password, nil
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
 }
 
 func CompareHashAndPassword(hashedPassword, password string) bool {
-	return hashedPassword == password
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	if err != nil {
+		return false
+	}
+	return true
 }
