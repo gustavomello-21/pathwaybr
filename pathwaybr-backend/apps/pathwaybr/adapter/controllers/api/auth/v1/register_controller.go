@@ -19,7 +19,7 @@ func NewRegisterController(registerUserUseCase contracts.RegisterUserUseCase) *R
 
 func (r *RegisterController) Create(httpContext *gin.Context) {
 	var registerRequestDto dto.RegisterRequestDto
-	if err := httpContext.ShouldBindJSON(registerRequestDto); err != nil {
+	if err := httpContext.ShouldBindJSON(&registerRequestDto); err != nil {
 		httpContext.JSON(400, gin.H{"error": err.Error()})
 		return
 	}

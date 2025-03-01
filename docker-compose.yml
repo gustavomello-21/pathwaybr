@@ -1,17 +1,20 @@
 services:
-  backend:
-    build: ./pathwaybr-backend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-  db:
-    image: postgres:9.6
-    ports:
-      - "5432:5432"
+  database:
+    image: postgres:13
+    container_name: pathwaybr_database
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: pathwaybr
+      POSTGRES_DB: pathwaybr_db
+    ports:
+      - "5432:5432"  # Aqui expõe a porta 5432 do container para localhost
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pathwaybr_network
+networks:
+  pathwaybr_network:
+    driver: bridge
 volumes:
-  db-data:
+  postgres_data:
+    driver: local

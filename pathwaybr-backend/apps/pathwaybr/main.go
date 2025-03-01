@@ -37,8 +37,10 @@ func main() {
 
 	userRepository := repositories.NewUserRepository(*postgresClient)
 	authenticateUserUseCase := usecases.NewAuthenticateUserUseCase(userRepository)
+	registerUserUseCase := usecases.NewRegisterUserUseCase(userRepository)
 	controllers := []interface{}{
 		v1.NewSessionController(authenticateUserUseCase),
+		v1.NewRegisterController(registerUserUseCase),
 	}
 
 	router := config.Routes(controllers)

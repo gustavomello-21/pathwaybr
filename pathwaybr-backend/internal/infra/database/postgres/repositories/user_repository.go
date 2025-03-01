@@ -37,12 +37,13 @@ func (u *UserRepository) FindByEmail(email string) (*entities.User, error) {
 
 	result := db.Where("email = ?", email).First(&user)
 	if result.Error != nil {
-		return nil, result.Error
+		fmt.Println("Bateu aqui")
 	}
 
 	entityUser := entities.User{
 		ID:        user.ID,
 		Username:  user.Username,
+		Password:  user.Password,
 		Email:     user.Email,
 		CratedAt:  user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,

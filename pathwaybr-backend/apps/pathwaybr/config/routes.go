@@ -17,6 +17,8 @@ func Routes(controllers []interface{}) *gin.Engine {
 			switch c := controller.(type) {
 			case *v1.SessionController:
 				v1Api.POST("/login", c.Create)
+			case *v1.RegisterController:
+				v1Api.POST("/register", c.Create)
 			}
 		}
 	}
