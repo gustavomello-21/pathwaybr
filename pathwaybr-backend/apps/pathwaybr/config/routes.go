@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	handler "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
 	auth "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
+	intinerary "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/intinerary/v1"
 	trip "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/trip/v1"
 )
 
@@ -24,6 +25,8 @@ func Routes(controllers []interface{}) *gin.Engine {
 				v1Api.POST("/trip", c.Create)
 				v1Api.GET("/users/:user_id/trips", c.Index)
 				v1Api.GET("/trips/:trip_id", c.Show)
+			case *intinerary.IntineraryController:
+				v1Api.POST("/trips/:trip_id/itineraries", c.Create)
 			}
 		}
 	}

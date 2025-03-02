@@ -5,6 +5,7 @@ import (
 	"os"
 
 	auth "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
+	intinerary "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/intinerary/v1"
 	trip "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/trip/v1"
 	"github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/config"
 	"github.com/gustavomello-21/pathwaybr-backend/internal/infra/database/postgres"
@@ -38,17 +39,20 @@ func main() {
 
 	userRepository := repositories.NewUserRepository(*postgresClient)
 	tripRepository := repositories.NewTripRepository(*postgresClient)
+	intineraryRepository := repositories.NewIntineraryRepository(*postgresClient)
 
 	authenticateUserUseCase := usecases.NewAuthenticateUserUseCase(userRepository)
 	registerUserUseCase := usecases.NewRegisterUserUseCase(userRepository)
 	createTripUseCase := usecases.NewCreateTripUseCase(tripRepository)
 	getUserTripsUseCase := usecases.NewGetUserTripsUseCase(tripRepository, userRepository)
 	getTripByIdUseCae := usecases.NewGetTripByIdUseCase(tripRepository)
+	addIntineraryToTripUseCase := usecases.NewAddIntineraryToTripUseCase(intineraryRepository, tripRepository)
 
 	controllers := []interface{}{
 		auth.NewSessionController(authenticateUserUseCase),
 		auth.NewRegisterController(registerUserUseCase),
 		trip.NewTripController(createTripUseCase, getUserTripsUseCase, getTripByIdUseCae),
+		intinerary.NewIntineraryController(addIntineraryToTripUseCase),
 	}
 
 	router := config.Routes(controllers)
