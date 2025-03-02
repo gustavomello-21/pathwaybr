@@ -26,6 +26,7 @@ func (i *IntineraryController) Create(httpContext *gin.Context) {
 		httpContext.JSON(400, gin.H{"error": "Invalid trip ID"})
 		return
 	}
+
 	var createIntineraryDto dto.CreateIntineraryDto
 	if err := httpContext.ShouldBindJSON(&createIntineraryDto); err != nil {
 		httpContext.JSON(400, gin.H{"error": err.Error()})

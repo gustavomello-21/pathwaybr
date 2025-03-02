@@ -19,6 +19,37 @@ func NewIntineraryRepository(client postgres.Client) repositories.IntineraryRepo
 	}
 }
 
+func (i *IntineraryRepository) FindById(intineraryId int) (*entities.Intinerary, error) {
+	db, err := i.client.Open()
+	if err != nil {
+		fmt.Println("Erro while oppenin database connection: ", err)
+		return nil, err
+	}
+
+	sqlDb, err := db.DB()
+	if err != nil {
+		fmt.Println("Erro while oppenin database connection: ", err)
+		return nil, err
+	}
+	defer sqlDb.Close()
+
+	var intineraryModel models.Intinerary
+	result := db.Where("id = ?", intineraryId).Find(&intineraryModel)
+	if result.Error != nil {
+		return nil, err
+	}
+
+	intinerary := entities.Intinerary{
+		ID:        intineraryModel.ID,
+		TripID:    intineraryModel.TripID,
+		DayNumber: intineraryModel.DayNumber,
+		CreatedAt: intineraryModel.CreatedAt,
+		UpdatedAt: intineraryModel.UpdatedAt,
+	}
+
+	return &intinerary, nil
+}
+
 func (i *IntineraryRepository) Save(intinerary entities.Intinerary) error {
 	db, err := i.client.Open()
 	if err != nil {

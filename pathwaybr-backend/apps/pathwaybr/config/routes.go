@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/gin-gonic/gin"
 	handler "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
+	activity "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/activity/v1"
 	auth "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
 	intinerary "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/intinerary/v1"
 	trip "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/trip/v1"
@@ -27,6 +28,8 @@ func Routes(controllers []interface{}) *gin.Engine {
 				v1Api.GET("/trips/:trip_id", c.Show)
 			case *intinerary.IntineraryController:
 				v1Api.POST("/trips/:trip_id/itineraries", c.Create)
+			case *activity.ActivityController:
+				v1Api.POST("/intineraries/:intinerary_id/activities", c.Create)
 			}
 		}
 	}
