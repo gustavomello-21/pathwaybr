@@ -1,0 +1,21 @@
+header {
+    background-color: #007bff; /* Cor azul para o header */
+    color: white; /* Texto branco */
+    padding: 15px 0; /* Espaçamento no topo e embaixo */
+    text-align: center; /* Centraliza o título */
+  }
+  
+  nav ul {
+    list-style: none; /* Remove os marcadores da lista */
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    gap: 20px; /* Espaçamento entre os links */
+  }
+  
+  nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
