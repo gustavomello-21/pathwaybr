@@ -3,7 +3,8 @@ package config
 import (
 	"github.com/gin-gonic/gin"
 	handler "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
-	v1 "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
+	auth "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
+	trip "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/trip/v1"
 )
 
 func Routes(controllers []interface{}) *gin.Engine {
@@ -15,10 +16,14 @@ func Routes(controllers []interface{}) *gin.Engine {
 	{
 		for _, controller := range controllers {
 			switch c := controller.(type) {
-			case *v1.SessionController:
+			case *auth.SessionController:
 				v1Api.POST("/login", c.Create)
-			case *v1.RegisterController:
+			case *auth.RegisterController:
 				v1Api.POST("/register", c.Create)
+			case *trip.TripController:
+				v1Api.POST("/trip", c.Create)
+				v1Api.GET("/users/:user_id/trips", c.Index)
+				v1Api.GET("/trips/:trip_id", c.Show)
 			}
 		}
 	}
