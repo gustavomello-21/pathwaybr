@@ -5,6 +5,7 @@ import (
 	handler "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers"
 	activity "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/activity/v1"
 	auth "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/auth/v1"
+	"github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/destination"
 	intinerary "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/intinerary/v1"
 	trip "github.com/gustavomello-21/pathwaybr-backend/apps/pathwaybr/adapter/controllers/api/trip/v1"
 )
@@ -13,6 +14,8 @@ func Routes(controllers []interface{}) *gin.Engine {
 	r := gin.Default()
 
 	r.GET("/health-check", handler.NewHealthCheckController().Get)
+
+	r.GET("/api/destinations/categories", destination.NewCategoryController().Index)
 
 	v1Api := r.Group("/api/v1")
 	{
